@@ -3,8 +3,14 @@ import signal
 import os
 import random
 import sys
+import pause
+import datetime
+from datetime import time
+from random import randint
+
 from importlib import import_module
 from time import sleep
+
 
 
 TASK_CLUSTER_COUNT = 5
@@ -12,15 +18,20 @@ TASK_INTERVAL_SECONDS = 10
 GROUPING_INTERVAL_SECONDS = 500
 EXTRA_DEFAULTS = []
 
+SLEEP_TIME = time(22,randint(0,59),randint(0,59))
+AWAKE_TIME = time(8,randint(0,59),randint(0,59))
 
 def emulation_loop(workflows, clustersize, taskinterval, taskgroupinterval, extra):
     while True:
-        for c in range(clustersize):
-            sleep(random.randrange(taskinterval))
-            index = random.randrange(len(workflows))
-            print(workflows[index].display)
-            workflows[index].action(extra)
-        sleep(random.randrange(taskgroupinterval))
+        if datetime.datetime.now().time() >= AWAKE_TIME and datetime.datetime.now().time() <SLEEP_TIME:
+            for c in range(clustersize):
+                sleep(random.randrange(taskinterval))
+                index = random.randrange(len(workflows))
+                print(workflows[index].display)
+                workflows[index].action(extra)
+            sleep(random.randrange(taskgroupinterval))
+        else:
+            pause.until(AWAKE_TIME)
 
 
 def import_workflows():
