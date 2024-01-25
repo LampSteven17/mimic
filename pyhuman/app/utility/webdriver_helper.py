@@ -12,11 +12,13 @@ class WebDriverHelper(BaseDriverHelper):
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--start-maximized")
     options.add_argument("--disable-infobars")
+    options.add_argument("--disable-dev-shm-usage")
+    options.binary_location = "/usr/bin/chromium-browser"
 
     def __init__(self):
         super().__init__(name=DRIVER_NAME)
-        self._driver_path = Service()
-        self._driver = webdriver.Chrome(self.options, self._driver_path)
+        #self._driver_path = Service()
+        self._driver = webdriver.Chrome(self.options)#, self._driver_path)
 
     @property
     def driver(self):
